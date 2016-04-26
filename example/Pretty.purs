@@ -33,3 +33,25 @@ id x = x
 
 const :: forall a b. a -> b -> a
 const x _ = x
+
+gcd n
+  | n > m = gcd n m
+  | n < m = gcd m n
+  | otherwise = 1
+
+foreign import sin :: Number -> String
+
+foreign import data CONSOLE :: !
+
+infixr 9 compose as ∘
+infix 9 lol as *#*
+
+class Show a where
+  show ∷ a → String
+
+class (Eq a) <= Ord a where
+  (<=) :: a -> a -> Eq
+
+instance showMaybe :: (Show a) => Maybe a where
+  show (Just a) = "Just " <> show a
+  show Nothing = "Nothing"

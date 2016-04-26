@@ -5,9 +5,9 @@ description:         Please see README.md
 homepage:            https://github.com/githubuser/ps-pretty#readme
 license:             BSD3
 license-file:        LICENSE
-author:              Author name here
-maintainer:          example@example.com
-copyright:           2016 Author name here
+author:              Christoph Hegemann
+maintainer:          christoph.hegemann1337@gmail.com
+copyright:           2016 Christoph Hegemann
 category:            Web
 build-type:          Simple
 -- extra-source-files:
@@ -15,7 +15,7 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Lib
+  exposed-modules:     Pretty
   ghc-options:         -Wall
   build-depends:       base >= 4.7 && < 5
                      , purescript
@@ -42,4 +42,4 @@ test-suite ps-pretty-test
 
 source-repository head
   type:     git
-  location: https://github.com/githubuser/ps-pretty
+  location: https://github.com/kritzcreek/ps-pretty
