@@ -92,7 +92,7 @@ ppDeclaration declaration = case declaration of
   --
   -- DataDeclaration DataDeclType (ProperName 'TypeName) [(String, Maybe Kind)] [(ProperName 'ConstructorName, [Type])]
   P.DataDeclaration P.Newtype typeName arguments dtors ->
-    "newtype" <+> ppProperName typeName <+> hsep (ppTypeargument <$> arguments)
+    "newtype" <+> ppProperName typeName <> (if null arguments then empty else space <> hsep (ppTypeargument <$> arguments))
     <+> equals <+> cat (ppDataConstructor <$> dtors)
   P.DataDeclaration P.Data typeName arguments dtors ->
     "data" <+> ppProperName typeName <+> hsep (ppTypeargument <$> arguments) PP.<$>
@@ -172,13 +172,18 @@ ppDeclaration declaration = case declaration of
   -- declarations)
   --
   -- TypeInstanceDeclaration Ident [Constraint] (Qualified (ProperName 'ClassName)) [Type] TypeInstanceBody
-  P.TypeInstanceDeclaration i constraints cn types body ->
+  P.TypeInstanceDeclaration i constraints cn types (P.ExplicitInstance body) ->
     "instance" <+> ppIdent i <+> "::"
+      <> (if null constraints then empty else space <> tupled (ppConstraint <$> constraints) <+> "=>")
       <+> text (P.showQualified P.runProperName cn)
-      <+> parens (hsep (ppType <$> types))
+      <+> parens (vsep (ppType <$> types))
       <+> "where"
       PP.<$> indent 2
-      ("body")
+        (vsep (ppDeclaration <$> body))
+  P.TypeInstanceDeclaration i _ cn types P.DerivedInstance ->
+    "derive instance" <+> ppIdent i <+> "::"
+      <+> text (P.showQualified P.runProperName cn)
+      <+> parens (hsep (ppType <$> types))
 
 ppValue :: P.Expr -> Doc
 ppValue = text . init . Box.render . P.prettyPrintValue 9
@@ -211,5 +216,3 @@ ppModule (P.Module _ moduleComments mn decls exports) = vsep
 
 printor :: IO ()
 printor = putDoc =<< ((<> line) . ppModule) <$> moduleFromFile
-
--- printor = print =<< moduleFromFile

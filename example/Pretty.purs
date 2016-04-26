@@ -52,6 +52,11 @@ class Show a where
 class (Eq a) <= Ord a where
   (<=) :: a -> a -> Eq
 
-instance showMaybe :: (Show a) => Maybe a where
+instance showString :: Show String where
+  show s = s
+
+instance showMaybe :: (Show a) => Show (Maybe a) where
   show (Just a) = "Just " <> show a
   show Nothing = "Nothing"
+
+derive instance genericMyRecord :: Generic MyRecord
